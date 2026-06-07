@@ -18,9 +18,7 @@
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--white);
@@ -38,20 +36,10 @@
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
-    .logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      color: var(--accent);
-    }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 2px; color: var(--accent); }
     .logo span { color: var(--white); }
     .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      color: var(--muted); text-decoration: none;
-      font-size: 0.9rem; font-weight: 500;
-      letter-spacing: 0.5px;
-      transition: color 0.2s;
-    }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; letter-spacing: 0.5px; transition: color 0.2s; }
     .nav-links a:hover { color: var(--accent); }
     .cart-btn {
       background: var(--accent); color: #000;
@@ -61,8 +49,140 @@
       letter-spacing: 1px;
       cursor: pointer;
       transition: background 0.2s, transform 0.1s;
+      position: relative;
     }
     .cart-btn:hover { background: var(--accent2); transform: scale(1.04); }
+
+    /* CART SIDEBAR */
+    .cart-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 200;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+    .cart-sidebar {
+      position: fixed; top: 0; right: -420px; bottom: 0;
+      width: 420px; max-width: 100vw;
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      z-index: 201;
+      display: flex; flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+    }
+    .cart-sidebar.open { right: 0; }
+
+    .cart-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.5rem 1.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .cart-header h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; letter-spacing: 1px;
+    }
+    .cart-close {
+      background: none; border: 1px solid var(--border);
+      color: var(--white); width: 36px; height: 36px;
+      font-size: 1.1rem; cursor: pointer;
+      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cart-close:hover { border-color: var(--accent); color: var(--accent); }
+
+    .cart-items {
+      flex: 1; overflow-y: auto;
+      padding: 1.5rem 1.8rem;
+    }
+    .cart-items::-webkit-scrollbar { width: 4px; }
+    .cart-items::-webkit-scrollbar-track { background: var(--bg); }
+    .cart-items::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .cart-empty {
+      text-align: center; padding: 4rem 1rem;
+      color: var(--muted);
+    }
+    .cart-empty .empty-icon { font-size: 4rem; margin-bottom: 1rem; display: block; }
+    .cart-empty p { font-size: 0.95rem; }
+
+    .cart-item {
+      display: flex; gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      animation: slideIn 0.25s ease both;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .cart-item-icon {
+      width: 60px; height: 60px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; flex-shrink: 0;
+    }
+    .cart-item-details { flex: 1; }
+    .cart-item-details h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .cart-item-details .item-price { color: var(--accent); font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px; }
+    .cart-item-controls {
+      display: flex; align-items: center; gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .qty-btn {
+      width: 26px; height: 26px;
+      background: var(--bg); border: 1px solid var(--border);
+      color: var(--white); font-size: 1rem;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .qty-num { font-weight: 700; font-size: 0.9rem; min-width: 20px; text-align: center; }
+    .remove-btn {
+      background: none; border: none;
+      color: var(--muted); font-size: 0.75rem;
+      cursor: pointer; margin-left: auto;
+      transition: color 0.2s; padding: 0.2rem 0.4rem;
+    }
+    .remove-btn:hover { color: #ff4444; }
+
+    .cart-footer {
+      padding: 1.5rem 1.8rem;
+      border-top: 1px solid var(--border);
+      background: var(--card);
+    }
+    .cart-subtotal {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 0.5rem;
+    }
+    .cart-subtotal span { color: var(--muted); font-size: 0.85rem; }
+    .cart-subtotal .total-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; color: var(--accent); letter-spacing: 1px;
+    }
+    .cart-note { color: var(--muted); font-size: 0.75rem; margin-bottom: 1.2rem; }
+    .checkout-btn {
+      width: 100%; background: var(--accent); color: #000;
+      border: none; padding: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700; font-size: 0.95rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .checkout-btn:hover { background: var(--accent2); transform: translateY(-1px); }
+    .checkout-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .clear-btn {
+      width: 100%; background: transparent;
+      border: 1px solid var(--border); color: var(--muted);
+      padding: 0.7rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem; letter-spacing: 1px;
+      text-transform: uppercase; cursor: pointer;
+      transition: all 0.2s; margin-top: 0.6rem;
+    }
+    .clear-btn:hover { border-color: #ff4444; color: #ff4444; }
 
     /* HERO */
     .hero {
@@ -70,8 +190,7 @@
       display: flex; flex-direction: column;
       justify-content: center; align-items: flex-start;
       padding: 8rem 3rem 4rem;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
     .hero::before {
       content: '';
@@ -80,285 +199,132 @@
       background: radial-gradient(circle, rgba(245,166,35,0.15) 0%, transparent 70%);
       pointer-events: none;
     }
-    .hero-tag {
-      font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 3px; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 1.2rem;
-      animation: fadeUp 0.6s ease both;
-    }
-    .hero h1 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4rem, 10vw, 9rem);
-      line-height: 0.95;
-      letter-spacing: 2px;
-      animation: fadeUp 0.7s ease 0.1s both;
-    }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--accent);
-      -webkit-text-stroke: 0px;
-    }
-    .hero p {
-      margin-top: 1.5rem;
-      font-size: 1.1rem; color: var(--muted);
-      max-width: 480px; line-height: 1.7;
-      animation: fadeUp 0.7s ease 0.2s both;
-    }
-    .hero-btns {
-      margin-top: 2.5rem;
-      display: flex; gap: 1rem;
-      animation: fadeUp 0.7s ease 0.3s both;
-    }
-    .btn-primary {
-      background: var(--accent); color: #000;
-      padding: 0.85rem 2.2rem;
-      font-weight: 700; font-size: 0.9rem;
-      letter-spacing: 1px; text-transform: uppercase;
-      border: none; cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none; display: inline-block;
-    }
+    .hero-tag { font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.2rem; animation: fadeUp 0.6s ease both; }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(4rem, 10vw, 9rem); line-height: 0.95; letter-spacing: 2px; animation: fadeUp 0.7s ease 0.1s both; }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero p { margin-top: 1.5rem; font-size: 1.1rem; color: var(--muted); max-width: 480px; line-height: 1.7; animation: fadeUp 0.7s ease 0.2s both; }
+    .hero-btns { margin-top: 2.5rem; display: flex; gap: 1rem; animation: fadeUp 0.7s ease 0.3s both; }
+    .btn-primary { background: var(--accent); color: #000; padding: 0.85rem 2.2rem; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
     .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
-    .btn-outline {
-      border: 1px solid var(--border); color: var(--white);
-      padding: 0.85rem 2.2rem;
-      font-weight: 500; font-size: 0.9rem;
-      letter-spacing: 1px;
-      background: transparent; cursor: pointer;
-      transition: all 0.2s;
-      text-decoration: none; display: inline-block;
-    }
+    .btn-outline { border: 1px solid var(--border); color: var(--white); padding: 0.85rem 2.2rem; font-weight: 500; font-size: 0.9rem; letter-spacing: 1px; background: transparent; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
     .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-
-    .hero-scroll {
-      position: absolute; bottom: 2rem; left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.75rem; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--muted);
-      animation: bounce 2s infinite;
-    }
+    .hero-scroll { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); animation: bounce 2s infinite; }
 
     /* MARQUEE */
-    .marquee-wrap {
-      overflow: hidden;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      background: var(--surface);
-      padding: 0.9rem 0;
-    }
-    .marquee {
-      display: flex; gap: 4rem;
-      animation: marquee 18s linear infinite;
-      white-space: nowrap;
-    }
-    .marquee span {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem; letter-spacing: 3px;
-      color: var(--muted);
-    }
+    .marquee-wrap { overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--surface); padding: 0.9rem 0; }
+    .marquee { display: flex; gap: 4rem; animation: marquee 18s linear infinite; white-space: nowrap; }
+    .marquee span { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 3px; color: var(--muted); }
     .marquee span b { color: var(--accent); }
 
-    /* CATEGORIES */
-    .section {
-      padding: 6rem 3rem;
-    }
-    .section-label {
-      font-size: 0.75rem; font-weight: 700;
-      letter-spacing: 3px; text-transform: uppercase;
-      color: var(--accent); margin-bottom: 0.8rem;
-    }
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.5rem, 5vw, 4rem);
-      letter-spacing: 1px; margin-bottom: 3rem;
-    }
+    /* SECTIONS */
+    .section { padding: 6rem 3rem; }
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.5rem, 5vw, 4rem); letter-spacing: 1px; margin-bottom: 3rem; }
 
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-    .cat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      padding: 2.5rem 2rem;
-      position: relative; overflow: hidden;
-      transition: transform 0.3s, border-color 0.3s;
-      cursor: pointer;
-    }
-    .cat-card:hover {
-      transform: translateY(-6px);
-      border-color: var(--accent);
-    }
-    .cat-card::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s;
-    }
+    .categories { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+    .cat-card { background: var(--card); border: 1px solid var(--border); padding: 2.5rem 2rem; position: relative; overflow: hidden; transition: transform 0.3s, border-color 0.3s; cursor: pointer; }
+    .cat-card:hover { transform: translateY(-6px); border-color: var(--accent); }
+    .cat-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--accent); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
     .cat-card:hover::after { transform: scaleX(1); }
-    .cat-icon {
-      font-size: 3rem; margin-bottom: 1.2rem;
-      display: block;
-    }
-    .cat-card h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.8rem; letter-spacing: 1px;
-      margin-bottom: 0.6rem;
-    }
+    .cat-icon { font-size: 3rem; margin-bottom: 1.2rem; display: block; }
+    .cat-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 1px; margin-bottom: 0.6rem; }
     .cat-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
-    .cat-count {
-      position: absolute; top: 1.5rem; right: 1.5rem;
-      font-size: 0.7rem; letter-spacing: 2px;
-      color: var(--accent); font-weight: 700;
-    }
+    .cat-count { position: absolute; top: 1.5rem; right: 1.5rem; font-size: 0.7rem; letter-spacing: 2px; color: var(--accent); font-weight: 700; }
 
-    /* PRODUCTS */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-    .product-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .product-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    }
-    .product-img {
-      height: 200px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 5rem;
-      background: linear-gradient(135deg, #1e1e1e, #111);
-      border-bottom: 1px solid var(--border);
-      position: relative;
-    }
-    .badge {
-      position: absolute; top: 1rem; left: 1rem;
-      background: var(--accent); color: #000;
-      font-size: 0.65rem; font-weight: 700;
-      letter-spacing: 1.5px; text-transform: uppercase;
-      padding: 0.2rem 0.6rem;
-    }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+    .product-card { background: var(--card); border: 1px solid var(--border); overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+    .product-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+    .product-img { height: 200px; display: flex; align-items: center; justify-content: center; font-size: 5rem; background: linear-gradient(135deg, #1e1e1e, #111); border-bottom: 1px solid var(--border); position: relative; }
+    .badge { position: absolute; top: 1rem; left: 1rem; background: var(--accent); color: #000; font-size: 0.65rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 0.2rem 0.6rem; }
     .product-info { padding: 1.5rem; }
     .product-info h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
     .product-info .desc { color: var(--muted); font-size: 0.82rem; margin-bottom: 1rem; }
-    .product-footer {
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .price {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.5rem; color: var(--accent);
-      letter-spacing: 1px;
-    }
-    .add-btn {
-      background: transparent;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      padding: 0.5rem 1rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.78rem; font-weight: 700;
-      letter-spacing: 1px; text-transform: uppercase;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
+    .product-footer { display: flex; align-items: center; justify-content: space-between; }
+    .price { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; color: var(--accent); letter-spacing: 1px; }
+    .add-btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0.5rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
     .add-btn:hover { background: var(--accent); color: #000; }
+    .add-btn.added { background: var(--accent); color: #000; }
 
-    /* WHY US */
-    .why-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 2rem;
-    }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
     .why-item { text-align: center; padding: 2rem 1rem; }
-    .why-icon {
-      font-size: 2.5rem; margin-bottom: 1rem;
-      display: block;
-    }
-    .why-item h4 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem; letter-spacing: 1px;
-      margin-bottom: 0.5rem;
-    }
+    .why-icon { font-size: 2.5rem; margin-bottom: 1rem; display: block; }
+    .why-item h4 { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 1px; margin-bottom: 0.5rem; }
     .why-item p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
 
-    /* CTA */
-    .cta-section {
-      margin: 0 3rem 6rem;
-      background: var(--accent);
-      padding: 4rem 3rem;
-      display: flex; align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap; gap: 2rem;
-    }
-    .cta-section h2 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2rem, 4vw, 3.5rem);
-      color: #000; letter-spacing: 2px;
-    }
+    .cta-section { margin: 0 3rem 6rem; background: var(--accent); padding: 4rem 3rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; }
+    .cta-section h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); color: #000; letter-spacing: 2px; }
     .cta-section p { color: rgba(0,0,0,0.65); margin-top: 0.5rem; }
-    .btn-dark {
-      background: #000; color: var(--white);
-      padding: 1rem 2.5rem;
-      font-weight: 700; font-size: 0.9rem;
-      letter-spacing: 1px; text-transform: uppercase;
-      border: none; cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
+    .btn-dark { background: #000; color: var(--white); padding: 1rem 2.5rem; font-weight: 700; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; border: none; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
     .btn-dark:hover { background: #222; transform: scale(1.03); }
 
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 3rem;
-      display: flex; justify-content: space-between;
-      align-items: center; flex-wrap: wrap; gap: 1rem;
-    }
+    footer { border-top: 1px solid var(--border); padding: 3rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
     footer .logo { font-size: 1.5rem; }
     footer p { color: var(--muted); font-size: 0.82rem; }
     .footer-links { display: flex; gap: 1.5rem; }
-    .footer-links a {
-      color: var(--muted); text-decoration: none;
-      font-size: 0.82rem;
-      transition: color 0.2s;
-    }
+    .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.82rem; transition: color 0.2s; }
     .footer-links a:hover { color: var(--accent); }
 
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* CHECKOUT MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 300;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+      padding: 1rem;
     }
-    @keyframes marquee {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      width: 100%; max-width: 480px;
+      transform: scale(0.95);
+      transition: transform 0.3s;
     }
-    @keyframes bounce {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(8px); }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; margin-bottom: 0.4rem; }
+    .modal p { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.8rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .form-group input, .form-group select {
+      width: 100%; background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--white); padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+      outline: none; transition: border-color 0.2s;
     }
+    .form-group input:focus, .form-group select:focus { border-color: var(--accent); }
+    .form-group select option { background: var(--card); }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .modal-order-btn {
+      width: 100%; background: var(--accent); color: #000;
+      border: none; padding: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700; font-size: 0.95rem;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; transition: all 0.2s; margin-top: 1rem;
+    }
+    .modal-order-btn:hover { background: var(--accent2); }
+    .modal-cancel { width: 100%; background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 0.7rem; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; margin-top: 0.5rem; }
+    .modal-cancel:hover { border-color: var(--muted); color: var(--white); }
+    .order-summary-line { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.85rem; color: var(--muted); border-bottom: 1px solid var(--border); margin-bottom: 0.4rem; }
+    .order-summary-line.total { color: var(--accent); font-weight: 700; font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; border-bottom: none; }
+
+    /* SUCCESS */
+    .success-modal { text-align: center; }
+    .success-icon { font-size: 4rem; margin-bottom: 1rem; display: block; }
+    .success-modal h2 { color: var(--accent); }
+    .success-modal p { margin-bottom: 1.5rem; }
 
     /* TOAST */
-    .toast {
-      position: fixed; bottom: 2rem; right: 2rem;
-      background: var(--accent); color: #000;
-      padding: 0.8rem 1.5rem;
-      font-weight: 700; font-size: 0.85rem;
-      letter-spacing: 0.5px;
-      transform: translateY(100px);
-      opacity: 0;
-      transition: all 0.3s;
-      z-index: 999;
-    }
-    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--accent); color: #000; padding: 0.8rem 1.5rem; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.5px; opacity: 0; transition: all 0.3s; z-index: 999; white-space: nowrap; }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
 
     @media (max-width: 768px) {
       nav { padding: 1rem 1.5rem; }
@@ -367,6 +333,8 @@
       .section { padding: 4rem 1.5rem; }
       .cta-section { margin: 0 1.5rem 4rem; padding: 2.5rem 1.5rem; }
       footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+      .cart-sidebar { width: 100vw; }
+      .form-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -381,8 +349,80 @@
     <li><a href="#why">Why Us</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
-  <button class="cart-btn">🛒 Cart (0)</button>
+  <button class="cart-btn" onclick="openCart()">🛒 Cart (<span id="cart-count">0</span>)</button>
 </nav>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-sidebar" id="cart-sidebar">
+  <div class="cart-header">
+    <h2>Your Cart</h2>
+    <button class="cart-close" onclick="closeCart()">✕</button>
+  </div>
+  <div class="cart-items" id="cart-items">
+    <div class="cart-empty">
+      <span class="empty-icon">🛒</span>
+      <p>Your cart is empty.<br>Add some products!</p>
+    </div>
+  </div>
+  <div class="cart-footer" id="cart-footer" style="display:none;">
+    <div class="cart-subtotal">
+      <span>Total</span>
+      <span class="total-price" id="cart-total">$0</span>
+    </div>
+    <p class="cart-note">Shipping calculated at checkout</p>
+    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout →</button>
+    <button class="clear-btn" onclick="clearCart()">Clear Cart</button>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal" id="modal-content">
+    <h2>Complete Order</h2>
+    <p>Fill in your details and we'll contact you to confirm.</p>
+    <div id="order-summary"></div>
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="c-name" placeholder="Your full name" />
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" id="c-email" placeholder="your@email.com" />
+    </div>
+    <div class="form-group">
+      <label>Phone / WhatsApp</label>
+      <input type="tel" id="c-phone" placeholder="+27 000 000 0000" />
+    </div>
+    <div class="form-group">
+      <label>Delivery Address</label>
+      <input type="text" id="c-address" placeholder="Street, City, Province" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Payment Method</label>
+        <select id="c-payment">
+          <option>EFT / Bank Transfer</option>
+          <option>PayPal</option>
+          <option>Cash on Delivery</option>
+          <option>Crypto</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Delivery Speed</label>
+        <select id="c-delivery">
+          <option>Standard (3–5 days)</option>
+          <option>Express (1–2 days)</option>
+          <option>Same Day (+$15)</option>
+        </select>
+      </div>
+    </div>
+    <button class="modal-order-btn" onclick="placeOrder()">Place Order →</button>
+    <button class="modal-cancel" onclick="closeCheckout()">← Back to Cart</button>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -417,19 +457,19 @@
   <p class="section-label">What We Offer</p>
   <h2 class="section-title">Our Categories</h2>
   <div class="categories">
-    <div class="cat-card">
+    <div class="cat-card" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
       <span class="cat-count">12 ITEMS</span>
       <span class="cat-icon">📱</span>
       <h3>iPhones</h3>
       <p>Latest Apple iPhones from iPhone 14 to iPhone 16 Pro Max. Unlocked, sealed in box, with warranty.</p>
     </div>
-    <div class="cat-card">
+    <div class="cat-card" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
       <span class="cat-count">8 ITEMS</span>
       <span class="cat-icon">🔌</span>
       <h3>Chargers</h3>
       <p>Fast chargers, MagSafe, USB-C cables, and power banks. Compatible with all iPhone models.</p>
     </div>
-    <div class="cat-card">
+    <div class="cat-card" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
       <span class="cat-count">5 PLANS</span>
       <span class="cat-icon">✍️</span>
       <h3>Assignment Writers</h3>
@@ -443,7 +483,6 @@
   <p class="section-label">Featured</p>
   <h2 class="section-title">Top Products</h2>
   <div class="products-grid">
-
     <div class="product-card">
       <div class="product-img">📱<span class="badge">NEW</span></div>
       <div class="product-info">
@@ -451,11 +490,10 @@
         <p class="desc">256GB, All colors. Unlocked. 1-year warranty included.</p>
         <div class="product-footer">
           <span class="price">$1,199</span>
-          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+          <button class="add-btn" onclick="addToCart('iPhone 16 Pro Max', 1199, '📱', this)">Add to Cart</button>
         </div>
       </div>
     </div>
-
     <div class="product-card">
       <div class="product-img">📲</div>
       <div class="product-info">
@@ -463,11 +501,10 @@
         <p class="desc">128GB, Sealed box. Available in Black, Blue, Pink & Yellow.</p>
         <div class="product-footer">
           <span class="price">$799</span>
-          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+          <button class="add-btn" onclick="addToCart('iPhone 15', 799, '📲', this)">Add to Cart</button>
         </div>
       </div>
     </div>
-
     <div class="product-card">
       <div class="product-img">🔌<span class="badge">BEST SELLER</span></div>
       <div class="product-info">
@@ -475,11 +512,10 @@
         <p class="desc">Official Apple MagSafe. Works with iPhone 12 and above.</p>
         <div class="product-footer">
           <span class="price">$39</span>
-          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+          <button class="add-btn" onclick="addToCart('MagSafe Charger 15W', 39, '🔌', this)">Add to Cart</button>
         </div>
       </div>
     </div>
-
     <div class="product-card">
       <div class="product-img">⚡</div>
       <div class="product-info">
@@ -487,11 +523,10 @@
         <p class="desc">Charges iPhone 15/16 from 0–50% in 30 minutes. Compact & travel-friendly.</p>
         <div class="product-footer">
           <span class="price">$25</span>
-          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+          <button class="add-btn" onclick="addToCart('USB-C 30W Fast Charger', 25, '⚡', this)">Add to Cart</button>
         </div>
       </div>
     </div>
-
     <div class="product-card">
       <div class="product-img">📝<span class="badge">POPULAR</span></div>
       <div class="product-info">
@@ -499,11 +534,10 @@
         <p class="desc">Up to 1,500 words. Any subject. Delivered in 48 hours. 100% original.</p>
         <div class="product-footer">
           <span class="price">$29</span>
-          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+          <button class="add-btn" onclick="addToCart('Essay Writing – Basic', 29, '📝', this)">Add to Cart</button>
         </div>
       </div>
     </div>
-
     <div class="product-card">
       <div class="product-img">📚</div>
       <div class="product-info">
@@ -511,11 +545,10 @@
         <p class="desc">Up to 5,000 words. Expert writers with PhD. With citations & references.</p>
         <div class="product-footer">
           <span class="price">$89</span>
-          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+          <button class="add-btn" onclick="addToCart('Research Paper – Premium', 89, '📚', this)">Add to Cart</button>
         </div>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -524,26 +557,10 @@
   <p class="section-label">Why Choose Us</p>
   <h2 class="section-title">We Deliver Trust</h2>
   <div class="why-grid">
-    <div class="why-item">
-      <span class="why-icon">✅</span>
-      <h4>100% Authentic</h4>
-      <p>All iPhones are brand new, sealed, and come with official Apple warranty.</p>
-    </div>
-    <div class="why-item">
-      <span class="why-icon">🚀</span>
-      <h4>Fast Delivery</h4>
-      <p>Orders shipped within 24 hours. Tracked and insured worldwide.</p>
-    </div>
-    <div class="why-item">
-      <span class="why-icon">🛡️</span>
-      <h4>Secure Payment</h4>
-      <p>We accept cards, PayPal, and crypto. All payments are encrypted and safe.</p>
-    </div>
-    <div class="why-item">
-      <span class="why-icon">💬</span>
-      <h4>24/7 Support</h4>
-      <p>Our support team is always here to help with orders, questions, and issues.</p>
-    </div>
+    <div class="why-item"><span class="why-icon">✅</span><h4>100% Authentic</h4><p>All iPhones are brand new, sealed, and come with official Apple warranty.</p></div>
+    <div class="why-item"><span class="why-icon">🚀</span><h4>Fast Delivery</h4><p>Orders shipped within 24 hours. Tracked and insured worldwide.</p></div>
+    <div class="why-item"><span class="why-icon">🛡️</span><h4>Secure Payment</h4><p>We accept cards, PayPal, and crypto. All payments are encrypted and safe.</p></div>
+    <div class="why-item"><span class="why-icon">💬</span><h4>24/7 Support</h4><p>Our support team is always here to help with orders, questions, and issues.</p></div>
   </div>
 </section>
 
@@ -553,7 +570,7 @@
     <h2>Ready to Shop?<br>Let's Go.</h2>
     <p>Join thousands of happy customers. Order today!</p>
   </div>
-  <button class="btn-dark" onclick="addToCart()">Start Shopping →</button>
+  <button class="btn-dark" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Start Shopping →</button>
 </div>
 
 <!-- FOOTER -->
@@ -568,18 +585,156 @@
 </footer>
 
 <!-- TOAST -->
-<div class="toast" id="toast">✓ Added to cart!</div>
+<div class="toast" id="toast"></div>
 
 <script>
-  let cartCount = 0;
-  const cartBtn = document.querySelector('.cart-btn');
-  const toast = document.getElementById('toast');
+  let cart = [];
 
-  function addToCart() {
-    cartCount++;
-    cartBtn.textContent = `🛒 Cart (${cartCount})`;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2500);
+  function addToCart(name, price, icon, btn) {
+    const existing = cart.find(i => i.name === name);
+    if (existing) {
+      existing.qty++;
+    } else {
+      cart.push({ name, price, icon, qty: 1 });
+    }
+    updateCartUI();
+    showToast('✓ ' + name + ' added!');
+    btn.textContent = '✓ Added';
+    btn.classList.add('added');
+    setTimeout(() => { btn.textContent = 'Add to Cart'; btn.classList.remove('added'); }, 1500);
+  }
+
+  function removeFromCart(name) {
+    cart = cart.filter(i => i.name !== name);
+    updateCartUI();
+  }
+
+  function changeQty(name, delta) {
+    const item = cart.find(i => i.name === name);
+    if (!item) return;
+    item.qty += delta;
+    if (item.qty <= 0) cart = cart.filter(i => i.name !== name);
+    updateCartUI();
+  }
+
+  function clearCart() {
+    cart = [];
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+    const totalPrice = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    document.getElementById('cart-count').textContent = totalItems;
+    const itemsEl = document.getElementById('cart-items');
+    const footerEl = document.getElementById('cart-footer');
+    document.getElementById('cart-total').textContent = '$' + totalPrice.toLocaleString();
+
+    if (cart.length === 0) {
+      itemsEl.innerHTML = '<div class="cart-empty"><span class="empty-icon">🛒</span><p>Your cart is empty.<br>Add some products!</p></div>';
+      footerEl.style.display = 'none';
+    } else {
+      footerEl.style.display = 'block';
+      itemsEl.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-icon">${item.icon}</div>
+          <div class="cart-item-details">
+            <h4>${item.name}</h4>
+            <div class="item-price">$${(item.price * item.qty).toLocaleString()}</div>
+            <div class="cart-item-controls">
+              <button class="qty-btn" onclick="changeQty('${item.name}', -1)">−</button>
+              <span class="qty-num">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty('${item.name}', 1)">+</button>
+              <button class="remove-btn" onclick="removeFromCart('${item.name}')">✕ Remove</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
+
+  function openCart() {
+    document.getElementById('cart-sidebar').classList.add('open');
+    document.getElementById('cart-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCart() {
+    document.getElementById('cart-sidebar').classList.remove('open');
+    document.getElementById('cart-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function openCheckout() {
+    if (cart.length === 0) return;
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const summaryEl = document.getElementById('order-summary');
+    summaryEl.innerHTML = cart.map(i => `
+      <div class="order-summary-line"><span>${i.name} x${i.qty}</span><span>$${(i.price * i.qty).toLocaleString()}</span></div>
+    `).join('') + `<div class="order-summary-line total"><span>Total</span><span>$${total.toLocaleString()}</span></div>`;
+    closeCart();
+    document.getElementById('checkout-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeCheckout() {
+    document.getElementById('checkout-modal').classList.remove('open');
+    document.body.style.overflow = '';
+    openCart();
+  }
+
+  function placeOrder() {
+    const name = document.getElementById('c-name').value.trim();
+    const email = document.getElementById('c-email').value.trim();
+    const phone = document.getElementById('c-phone').value.trim();
+    const address = document.getElementById('c-address').value.trim();
+    if (!name || !email || !phone || !address) {
+      showToast('⚠️ Please fill in all fields');
+      return;
+    }
+    const payment = document.getElementById('c-payment').value;
+    const delivery = document.getElementById('c-delivery').value;
+    const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const modalContent = document.getElementById('modal-content');
+    modalContent.innerHTML = `
+      <div class="success-modal">
+        <span class="success-icon">🎉</span>
+        <h2>Order Placed!</h2>
+        <p>Thank you <strong>${name}</strong>! Your order of <strong>$${total.toLocaleString()}</strong> has been received.<br><br>
+        We'll contact you on <strong>${phone}</strong> or <strong>${email}</strong> to confirm payment via <strong>${payment}</strong>.<br><br>
+        Delivery: <strong>${delivery}</strong></p>
+        <button class="modal-order-btn" onclick="finishOrder()">Back to Shop</button>
+      </div>
+    `;
+    cart = [];
+    updateCartUI();
+  }
+
+  function finishOrder() {
+    document.getElementById('checkout-modal').classList.remove('open');
+    document.body.style.overflow = '';
+    document.getElementById('modal-content').innerHTML = `
+      <h2>Complete Order</h2>
+      <p>Fill in your details and we'll contact you to confirm.</p>
+      <div id="order-summary"></div>
+      <div class="form-group"><label>Full Name</label><input type="text" id="c-name" placeholder="Your full name" /></div>
+      <div class="form-group"><label>Email</label><input type="email" id="c-email" placeholder="your@email.com" /></div>
+      <div class="form-group"><label>Phone / WhatsApp</label><input type="tel" id="c-phone" placeholder="+27 000 000 0000" /></div>
+      <div class="form-group"><label>Delivery Address</label><input type="text" id="c-address" placeholder="Street, City, Province" /></div>
+      <div class="form-row">
+        <div class="form-group"><label>Payment Method</label><select id="c-payment"><option>EFT / Bank Transfer</option><option>PayPal</option><option>Cash on Delivery</option><option>Crypto</option></select></div>
+        <div class="form-group"><label>Delivery Speed</label><select id="c-delivery"><option>Standard (3–5 days)</option><option>Express (1–2 days)</option><option>Same Day (+$15)</option></select></div>
+      </div>
+      <button class="modal-order-btn" onclick="placeOrder()">Place Order →</button>
+      <button class="modal-cancel" onclick="closeCheckout()">← Back to Cart</button>
+    `;
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
   }
 </script>
 </body>
