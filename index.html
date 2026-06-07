@@ -683,7 +683,7 @@
     openCart();
   }
 
-  function placeOrder() {
+  async function placeOrder() {
     const name = document.getElementById('c-name').value.trim();
     const email = document.getElementById('c-email').value.trim();
     const phone = document.getElementById('c-phone').value.trim();
@@ -695,6 +695,30 @@
     const payment = document.getElementById('c-payment').value;
     const delivery = document.getElementById('c-delivery').value;
     const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const orderDetails = cart.map(i => `${i.name} x${i.qty} = $${(i.price * i.qty).toLocaleString()}`).join('\n');
+
+    const orderBtn = document.querySelector('.modal-order-btn');
+    orderBtn.textContent = 'Sending...';
+    orderBtn.disabled = true;
+
+    try {
+      await fetch('https://formspree.io/f/mbdegada', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          _subject: '🛒 New BuyALot Order from ' + name,
+          Name: name,
+          Email: email,
+          Phone: phone,
+          Address: address,
+          Payment: payment,
+          Delivery: delivery,
+          'Order Items': orderDetails,
+          'Order Total': '$' + total.toLocaleString()
+        })
+      });
+    } catch(e) {}
+
     const modalContent = document.getElementById('modal-content');
     modalContent.innerHTML = `
       <div class="success-modal">
