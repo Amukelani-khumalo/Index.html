@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>BuyALot – Shop Everything</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --surface: #141414;
+      --card: #1a1a1a;
+      --accent: #f5a623;
+      --accent2: #e8f542;
+      --white: #f5f5f0;
+      --muted: #888;
+      --border: #2a2a2a;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      color: var(--accent);
+    }
+    .logo span { color: var(--white); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .cart-btn {
+      background: var(--accent); color: #000;
+      border: none; padding: 0.6rem 1.4rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .cart-btn:hover { background: var(--accent2); transform: scale(1.04); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(245,166,35,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4rem, 10vw, 9rem);
+      line-height: 0.95;
+      letter-spacing: 2px;
+      animation: fadeUp 0.7s ease 0.1s both;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+      -webkit-text-stroke: 0px;
+    }
+    .hero p {
+      margin-top: 1.5rem;
+      font-size: 1.1rem; color: var(--muted);
+      max-width: 480px; line-height: 1.7;
+      animation: fadeUp 0.7s ease 0.2s both;
+    }
+    .hero-btns {
+      margin-top: 2.5rem;
+      display: flex; gap: 1rem;
+      animation: fadeUp 0.7s ease 0.3s both;
+    }
+    .btn-primary {
+      background: var(--accent); color: #000;
+      padding: 0.85rem 2.2rem;
+      font-weight: 700; font-size: 0.9rem;
+      letter-spacing: 1px; text-transform: uppercase;
+      border: none; cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--accent2); transform: translateY(-2px); }
+    .btn-outline {
+      border: 1px solid var(--border); color: var(--white);
+      padding: 0.85rem 2.2rem;
+      font-weight: 500; font-size: 0.9rem;
+      letter-spacing: 1px;
+      background: transparent; cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--muted);
+      animation: bounce 2s infinite;
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      padding: 0.9rem 0;
+    }
+    .marquee {
+      display: flex; gap: 4rem;
+      animation: marquee 18s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee span {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem; letter-spacing: 3px;
+      color: var(--muted);
+    }
+    .marquee span b { color: var(--accent); }
+
+    /* CATEGORIES */
+    .section {
+      padding: 6rem 3rem;
+    }
+    .section-label {
+      font-size: 0.75rem; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      letter-spacing: 1px; margin-bottom: 3rem;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    .cat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 2.5rem 2rem;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+      cursor: pointer;
+    }
+    .cat-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+    }
+    .cat-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .cat-card:hover::after { transform: scaleX(1); }
+    .cat-icon {
+      font-size: 3rem; margin-bottom: 1.2rem;
+      display: block;
+    }
+    .cat-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem; letter-spacing: 1px;
+      margin-bottom: 0.6rem;
+    }
+    .cat-card p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+    .cat-count {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      font-size: 0.7rem; letter-spacing: 2px;
+      color: var(--accent); font-weight: 700;
+    }
+
+    /* PRODUCTS */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .product-img {
+      height: 200px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem;
+      background: linear-gradient(135deg, #1e1e1e, #111);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .badge {
+      position: absolute; top: 1rem; left: 1rem;
+      background: var(--accent); color: #000;
+      font-size: 0.65rem; font-weight: 700;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+    }
+    .product-info { padding: 1.5rem; }
+    .product-info h4 { font-size: 1rem; font-weight: 700; margin-bottom: 0.3rem; }
+    .product-info .desc { color: var(--muted); font-size: 0.82rem; margin-bottom: 1rem; }
+    .product-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.5rem; color: var(--accent);
+      letter-spacing: 1px;
+    }
+    .add-btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.5rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .add-btn:hover { background: var(--accent); color: #000; }
+
+    /* WHY US */
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+    .why-item { text-align: center; padding: 2rem 1rem; }
+    .why-icon {
+      font-size: 2.5rem; margin-bottom: 1rem;
+      display: block;
+    }
+    .why-item h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem; letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .why-item p { color: var(--muted); font-size: 0.88rem; line-height: 1.6; }
+
+    /* CTA */
+    .cta-section {
+      margin: 0 3rem 6rem;
+      background: var(--accent);
+      padding: 4rem 3rem;
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 2rem;
+    }
+    .cta-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      color: #000; letter-spacing: 2px;
+    }
+    .cta-section p { color: rgba(0,0,0,0.65); margin-top: 0.5rem; }
+    .btn-dark {
+      background: #000; color: var(--white);
+      padding: 1rem 2.5rem;
+      font-weight: 700; font-size: 0.9rem;
+      letter-spacing: 1px; text-transform: uppercase;
+      border: none; cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .btn-dark:hover { background: #222; transform: scale(1.03); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    footer .logo { font-size: 1.5rem; }
+    footer p { color: var(--muted); font-size: 0.82rem; }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a {
+      color: var(--muted); text-decoration: none;
+      font-size: 0.82rem;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--accent); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      background: var(--accent); color: #000;
+      padding: 0.8rem 1.5rem;
+      font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 0.5px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 999;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.5rem 3rem; }
+      .section { padding: 4rem 1.5rem; }
+      .cta-section { margin: 0 1.5rem 4rem; padding: 2.5rem 1.5rem; }
+      footer { padding: 2rem 1.5rem; flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Buy<span>ALot</span></div>
+  <ul class="nav-links">
+    <li><a href="#categories">Categories</a></li>
+    <li><a href="#products">Products</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="cart-btn">🛒 Cart (0)</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-tag">✦ Everything You Need, All In One Place</p>
+  <h1>Shop <em>Big.</em><br>Save <em>Bigger.</em></h1>
+  <p>iPhones, chargers, and professional assignment writing — curated, trusted, and delivered fast.</p>
+  <div class="hero-btns">
+    <a href="#products" class="btn-primary">Shop Now</a>
+    <a href="#categories" class="btn-outline">Browse Categories</a>
+  </div>
+  <div class="hero-scroll">↓ Scroll</div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee">
+    <span>📱 iPhones &nbsp;<b>★</b></span>
+    <span>🔌 Chargers &nbsp;<b>★</b></span>
+    <span>✍️ Assignment Writers &nbsp;<b>★</b></span>
+    <span>🚚 Fast Delivery &nbsp;<b>★</b></span>
+    <span>💯 Trusted Quality &nbsp;<b>★</b></span>
+    <span>📱 iPhones &nbsp;<b>★</b></span>
+    <span>🔌 Chargers &nbsp;<b>★</b></span>
+    <span>✍️ Assignment Writers &nbsp;<b>★</b></span>
+    <span>🚚 Fast Delivery &nbsp;<b>★</b></span>
+    <span>💯 Trusted Quality &nbsp;<b>★</b></span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section" id="categories">
+  <p class="section-label">What We Offer</p>
+  <h2 class="section-title">Our Categories</h2>
+  <div class="categories">
+    <div class="cat-card">
+      <span class="cat-count">12 ITEMS</span>
+      <span class="cat-icon">📱</span>
+      <h3>iPhones</h3>
+      <p>Latest Apple iPhones from iPhone 14 to iPhone 16 Pro Max. Unlocked, sealed in box, with warranty.</p>
+    </div>
+    <div class="cat-card">
+      <span class="cat-count">8 ITEMS</span>
+      <span class="cat-icon">🔌</span>
+      <h3>Chargers</h3>
+      <p>Fast chargers, MagSafe, USB-C cables, and power banks. Compatible with all iPhone models.</p>
+    </div>
+    <div class="cat-card">
+      <span class="cat-count">5 PLANS</span>
+      <span class="cat-icon">✍️</span>
+      <h3>Assignment Writers</h3>
+      <p>Professional academic writers for essays, research papers, dissertations, and more. Plagiarism-free, on time.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section class="section" id="products" style="padding-top:0;">
+  <p class="section-label">Featured</p>
+  <h2 class="section-title">Top Products</h2>
+  <div class="products-grid">
+
+    <div class="product-card">
+      <div class="product-img">📱<span class="badge">NEW</span></div>
+      <div class="product-info">
+        <h4>iPhone 16 Pro Max</h4>
+        <p class="desc">256GB, All colors. Unlocked. 1-year warranty included.</p>
+        <div class="product-footer">
+          <span class="price">$1,199</span>
+          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">📲</div>
+      <div class="product-info">
+        <h4>iPhone 15</h4>
+        <p class="desc">128GB, Sealed box. Available in Black, Blue, Pink & Yellow.</p>
+        <div class="product-footer">
+          <span class="price">$799</span>
+          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">🔌<span class="badge">BEST SELLER</span></div>
+      <div class="product-info">
+        <h4>MagSafe Charger 15W</h4>
+        <p class="desc">Official Apple MagSafe. Works with iPhone 12 and above.</p>
+        <div class="product-footer">
+          <span class="price">$39</span>
+          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">⚡</div>
+      <div class="product-info">
+        <h4>USB-C 30W Fast Charger</h4>
+        <p class="desc">Charges iPhone 15/16 from 0–50% in 30 minutes. Compact & travel-friendly.</p>
+        <div class="product-footer">
+          <span class="price">$25</span>
+          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">📝<span class="badge">POPULAR</span></div>
+      <div class="product-info">
+        <h4>Essay Writing – Basic</h4>
+        <p class="desc">Up to 1,500 words. Any subject. Delivered in 48 hours. 100% original.</p>
+        <div class="product-footer">
+          <span class="price">$29</span>
+          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <div class="product-img">📚</div>
+      <div class="product-info">
+        <h4>Research Paper – Premium</h4>
+        <p class="desc">Up to 5,000 words. Expert writers with PhD. With citations & references.</p>
+        <div class="product-footer">
+          <span class="price">$89</span>
+          <button class="add-btn" onclick="addToCart()">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="section" id="why" style="background: var(--surface);">
+  <p class="section-label">Why Choose Us</p>
+  <h2 class="section-title">We Deliver Trust</h2>
+  <div class="why-grid">
+    <div class="why-item">
+      <span class="why-icon">✅</span>
+      <h4>100% Authentic</h4>
+      <p>All iPhones are brand new, sealed, and come with official Apple warranty.</p>
+    </div>
+    <div class="why-item">
+      <span class="why-icon">🚀</span>
+      <h4>Fast Delivery</h4>
+      <p>Orders shipped within 24 hours. Tracked and insured worldwide.</p>
+    </div>
+    <div class="why-item">
+      <span class="why-icon">🛡️</span>
+      <h4>Secure Payment</h4>
+      <p>We accept cards, PayPal, and crypto. All payments are encrypted and safe.</p>
+    </div>
+    <div class="why-item">
+      <span class="why-icon">💬</span>
+      <h4>24/7 Support</h4>
+      <p>Our support team is always here to help with orders, questions, and issues.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section" id="contact">
+  <div>
+    <h2>Ready to Shop?<br>Let's Go.</h2>
+    <p>Join thousands of happy customers. Order today!</p>
+  </div>
+  <button class="btn-dark" onclick="addToCart()">Start Shopping →</button>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="logo">Buy<span>ALot</span></div>
+  <p>© 2026 BuyALot. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy</a>
+    <a href="#">Terms</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Added to cart!</div>
+
+<script>
+  let cartCount = 0;
+  const cartBtn = document.querySelector('.cart-btn');
+  const toast = document.getElementById('toast');
+
+  function addToCart() {
+    cartCount++;
+    cartBtn.textContent = `🛒 Cart (${cartCount})`;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+  }
+</script>
+</body>
+</html>
